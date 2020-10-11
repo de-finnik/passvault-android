@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name" translatable="false">PassVault</string>
+    <string name="author" translatable="false">finnik</string>
+    <string name="enter_main_password">Please enter a strong main password with that all your saved passwords will be encrypted</string>
+    <string name="login" translatable="false">Login</string>
+
+    <string name="generate_password">Generate</string>
+    <string name="manage_passwords">Manage</string>
+
+    <string name="password_length">Password length: %d</string>
+
+    <string name="big_letters">Big Letters</string>
+    <string name="small_letters">Small Letters</string>
+    <string name="numbers">Numbers</string>
+    <string name="specials">Special Characters</string>
+
+    <string name="pass">Password</string>
+    <string name="site">Website</string>
+    <string name="user">Username/Email</string>
+    <string name="other">Other informations</string>
+
+    <string name="save">Save</string>
+
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="confirm_deleting_password">Do you want to delete this password?</string>
+
+    <string name="more">More</string>
+    <string name="search">Search</string>
+    <string name="wrong_pass">Wrong password!</string>
+
+    <string name="created_drive_pass">Successfully created drive password, with that your passwords on Google Drive will be encrypted: %s</string>
+    <string name="enter_drive_pass">Please enter your drive password, with that your passwords on Google Drive are encrypted:</string>
+    <string name="wrong_drive_pass">Wrong password! Do you want to delete your drive passwords in order to create a new drive password?</string>
+    <string name="confirm_deleting_drive">If you are sure enter \'CONFIRM\'</string>
+    <string name="synchronized_with_drive">Synchronized with drive</string>
+    <string name="error_while_synchronizing">An error occurred while synchronizing with Google Drive. Please try again, search the internet on Google status code %s or contact us(de.finnik@gmx.net).</string>
+</resources>

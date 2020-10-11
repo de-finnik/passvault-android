@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/content_padding_normal">
+
+    <TextView
+        android:id="@+id/textView_password_length"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <SeekBar
+        android:id="@+id/seekBar_password_length"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="25"
+        android:progress="0" />
+
+    <Switch
+        android:id="@+id/switch_big_letters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/big_letters"
+        android:textSize="20sp" />
+
+    <Switch
+        android:id="@+id/switch_small_letters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/small_letters"
+        android:textSize="20sp" />
+
+    <Switch
+        android:id="@+id/switch_numbers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/numbers"
+        android:textSize="20sp" />
+
+    <Switch
+        android:id="@+id/switch_specials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/specials"
+        android:textSize="20sp"/>
+</LinearLayout>

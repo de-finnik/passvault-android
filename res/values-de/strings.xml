@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_main_password">Bitte gib ein starkes Hauptpasswort ein, mit dem alle deine gespeicherten Passwörter verschlüsselt werden</string>
+
+    <string name="generate_password">Generieren</string>
+    <string name="manage_passwords">Verwalten</string>
+
+    <string name="password_length">Passwortlänge: %d</string>
+
+    <string name="big_letters">Großbuchstaben</string>
+    <string name="small_letters">Kleinbuchstaben</string>
+    <string name="numbers">Zahlen</string>
+    <string name="specials">Sonderzeichen</string>
+
+    <string name="pass">Passwort</string>
+    <string name="site">Webseite</string>
+    <string name="user">Benutzername/Email</string>
+    <string name="other">Andere Informationen</string>
+
+    <string name="save">Speichern</string>
+
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="confirm_deleting_password">Do you want to delete this password?</string>
+
+    <string name="more">More</string>
+    <string name="search">Search</string>
+    <string name="wrong_pass">Wrong password!</string>
+
+    <string name="created_drive_pass">Successfully created drive password, with that your passwords on Google Drive will be encrypted: %s</string>
+    <string name="enter_drive_pass">Please enter your drive password, with that your passwords on Google Drive are encrypted:</string>
+    <string name="wrong_drive_pass">Wrong password! Do you want to delete your drive passwords in order to create a new drive password?</string>
+    <string name="confirm_deleting_drive">If you are sure enter \'CONFIRM\'</string>
+    <string name="synchronized_with_drive">Synchronized with drive</string>
+    <string name="error_while_synchronizing">Bei der Synchronisierung mit Google Drive ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut, suchen Sie im Internet nach dem Google-Statuscode %s oder kontaktieren Sie uns (de.finnik@gmx.net). </string>
+</resources>
