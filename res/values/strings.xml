@@ -36,4 +36,5 @@
     <string name="confirm_deleting_drive">If you are sure enter \'CONFIRM\'</string>
     <string name="synchronized_with_drive">Synchronized with drive</string>
     <string name="error_while_synchronizing">An error occurred while synchronizing with Google Drive. Please try again, search the internet on Google status code %s or contact us(de.finnik@gmx.net).</string>
+    <string name="show_password">Show password</string>
 </resources>

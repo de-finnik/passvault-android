@@ -19,6 +19,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.generate_password, R.string.manage_passwords};
     private final Context mContext;
+    private Fragment fragment;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -29,11 +30,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        if(position==0) {
-            return new GenerateFragment();
+        if (position == 0) {
+            fragment = new GenerateFragment();
         } else {
-            return new ManageFragment();
+            fragment = new ManageFragment();
         }
+        return fragment;
+    }
+
+    public Fragment getFragment() {
+        return fragment;
     }
 
     @Nullable

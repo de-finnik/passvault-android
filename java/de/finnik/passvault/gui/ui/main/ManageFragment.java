@@ -51,7 +51,6 @@ public class ManageFragment extends Fragment {
             ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("", adapter.getItem(position).getPass());
             clipboard.setPrimaryClip(clip);
-            ((TextView) adapter.getView(position, view, parent).findViewById(R.id.textView_list_pass)).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
         });
         registerForContextMenu(list_view_passwords);
 
@@ -87,18 +86,23 @@ public class ManageFragment extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId() == R.id.list_view_passwords) {
-            menu.add(0, 0, 0, getString(R.string.edit));
-            menu.add(0, 1, 1, getString(R.string.delete));
+            menu.add(0, 0, 0, getString(R.string.show_password));
+            menu.add(0, 1, 1, getString(R.string.edit));
+            menu.add(0, 2, 2, getString(R.string.delete));
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
+        if (menuItem.getGroupId() != 0)
+            return false;
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
         Password selected = displayedPasswords.get(info.position);
         switch (menuItem.getItemId()) {
             case 0:
-
+                ((TextView) adapter.getView(info.position, info.targetView, (ViewGroup) menuItem.getActionView()).findViewById(R.id.textView_list_pass)).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                break;
+            case 1:
 
                 View layout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit_password, null);
                 AlertDialog edit_dialog = new AlertDialog.Builder(getContext()).setView(layout).create();
@@ -115,7 +119,7 @@ public class ManageFragment extends Fragment {
                 edit_user.setText(selected.getUser());
                 edit_other.setText(selected.getOther());
 
-                edit_dialog.findViewById(R.id.button_edit_save).setOnClickListener(v->{
+                edit_dialog.findViewById(R.id.button_edit_save).setOnClickListener(v -> {
                     selected.setPass(edit_pass.getText().toString());
                     selected.setSite(edit_site.getText().toString());
                     selected.setUser(edit_user.getText().toString());
@@ -125,7 +129,7 @@ public class ManageFragment extends Fragment {
                     edit_dialog.hide();
                 });
                 break;
-            case 1:
+            case 2:
                 GUIUtils.confirmDialog(getContext(), getString(R.string.confirm_deleting_password), b -> {
                     if (b) {
                         PassUtils.deletePassword(selected);

@@ -1,7 +1,7 @@
 package de.finnik.passvault.drive;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -24,9 +24,11 @@ import de.finnik.passvault.utils.FileUtils;
 import de.finnik.passvault.utils.GUIUtils;
 
 public class DriveLocalHelper {
+    private static final String TAG = "DriveLocalHelper";
     private static DriveServiceHelper mDriveServiceHelper;
 
     public static void synchronize(Context context, GoogleSignInAccount googleSignInAccount) {
+        Log.i(TAG, "synchronize: ");
         if (mDriveServiceHelper == null) {
             GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_APPDATA));
             credential.setSelectedAccount(googleSignInAccount.getAccount());
@@ -40,7 +42,7 @@ public class DriveLocalHelper {
 
         mDriveServiceHelper.fileExists().addOnSuccessListener(fileExists -> {
             if (fileExists) {
-                fileExists(context, googleSignInAccount);
+                readPassFile(context, googleSignInAccount);
             } else {
                 String drivePass = generateDrivePass();
                 compareAndStore(context, drivePass, new Password[0]);
@@ -53,7 +55,7 @@ public class DriveLocalHelper {
         return PasswordGenerator.generatePassword(12, PasswordGenerator.PassChars.BIG_LETTERS, PasswordGenerator.PassChars.SMALL_LETTERS, PasswordGenerator.PassChars.NUMBERS);
     }
 
-    private static void fileExists(Context context, GoogleSignInAccount googleSignInAccount) {
+    private static void readPassFile(Context context, GoogleSignInAccount googleSignInAccount) {
         if (PassProperty.DRIVE_PASSWORD.getValue().isEmpty()) {
             GUIUtils.inputDialog(context, context.getString(R.string.enter_drive_pass), drivePass -> mDriveServiceHelper.readPasswords(drivePass)
                     .addOnSuccessListener(drivePasswords -> compareAndStore(context, drivePass, drivePasswords))
@@ -90,7 +92,11 @@ public class DriveLocalHelper {
 
     private static void saveOnDrive(Context context, String drivePass) {
         ManageFragment.refreshPasswords();
-        Toast.makeText(context, context.getString(R.string.synchronized_with_drive), Toast.LENGTH_LONG).show();
+        PassActivity.button_synchronize_drawable.addAnimationListener(loopNumber -> {
+            if(loopNumber == 0) {
+                PassActivity.button_synchronize_drawable.stop();
+            }
+        });
         mDriveServiceHelper.savePasswords(context, PassActivity.passwordList, drivePass).addOnSuccessListener(fileId -> PassProperty.DRIVE_PASSWORD.setValue(context, PassActivity.getAES().encrypt(drivePass))).addOnFailureListener(Throwable::printStackTrace);
     }
 }

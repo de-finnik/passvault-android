@@ -25,14 +25,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0">
-
-            <ImageButton
+            <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/button_synchronize"
-                android:layout_width="40dp"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/refresh_drive"/>
+                android:src="@drawable/test"/>
         </LinearLayout>
     </LinearLayout>
 

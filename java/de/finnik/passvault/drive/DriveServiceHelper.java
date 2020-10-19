@@ -1,7 +1,6 @@
 package de.finnik.passvault.drive;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -24,18 +23,10 @@ public class DriveServiceHelper {
 
     private static final String TAG = "DriveServiceHelper";
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
-    private Drive mDriveService;
+    private final Drive mDriveService;
 
     public DriveServiceHelper(Drive driveService) {
         mDriveService = driveService;
-        Tasks.call(mExecutor, ()->{
-            try {
-                mDriveService.files().list().setSpaces("appDataFolder").execute().getFiles().forEach(f-> Log.i(TAG, "DriveServiceHelper: "+f.getName()+" "+f.getId()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
     }
 
     public Task<Boolean> fileExists() {
