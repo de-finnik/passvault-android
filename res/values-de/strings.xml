@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="enter_main_password">Bitte gib ein starkes Hauptpasswort ein, mit dem alle deine gespeicherten Passwörter verschlüsselt werden</string>
+    <string name="create_main_password">Bitte gib ein starkes Hauptpasswort ein, mit dem alle deine gespeicherten Passwörter verschlüsselt werden:</string>
 
     <string name="generate_password">Generieren</string>
     <string name="manage_passwords">Verwalten</string>
@@ -35,4 +35,10 @@
     <string name="synchronized_with_drive">Synchronized with drive</string>
     <string name="error_while_synchronizing">Bei der Synchronisierung mit Google Drive ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut, suchen Sie im Internet nach dem Google-Statuscode %s oder kontaktieren Sie uns (de.finnik@gmx.net). </string>
     <string name="show_password">Passwort anzeigen</string>
+    <string name="error_disconnecting_drive">Beim Trennen von Google Drive ist ein Fehler aufgetreten</string>
+    <string name="disconnected_drive">Erfolgreich von Google Drive getrennt</string>
+    <string name="enter_main_password">Bitte Hauptpasswort eingeben</string>
+    <string name="repeat_main_pass">Bitte Passwort erneut eingeben:</string>
+    <string name="weak_main_pass">Dieses Passwort ist zu schwach: Bitte wähle ein stärkeres</string>
+    <string name="confirm_main_pass">Bestätigen</string>
 </resources>

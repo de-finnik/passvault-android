@@ -103,7 +103,6 @@ public class ManageFragment extends Fragment {
                 ((TextView) adapter.getView(info.position, info.targetView, (ViewGroup) menuItem.getActionView()).findViewById(R.id.textView_list_pass)).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 break;
             case 1:
-
                 View layout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit_password, null);
                 AlertDialog edit_dialog = new AlertDialog.Builder(getContext()).setView(layout).create();
                 edit_dialog.setContentView(layout);
@@ -125,15 +124,15 @@ public class ManageFragment extends Fragment {
                     selected.setUser(edit_user.getText().toString());
                     selected.setOther(edit_other.getText().toString());
 
-                    PassActivity.synchronize(getContext());
+                    PassActivity.synchronize(getActivity());
                     edit_dialog.hide();
                 });
                 break;
             case 2:
-                GUIUtils.confirmDialog(getContext(), getString(R.string.confirm_deleting_password), b -> {
+                GUIUtils.confirmDialog(getActivity(), getString(R.string.confirm_deleting_password), b -> {
                     if (b) {
                         PassUtils.deletePassword(selected);
-                        PassActivity.synchronize(getContext());
+                        PassActivity.synchronize(getActivity());
                     }
                 });
 

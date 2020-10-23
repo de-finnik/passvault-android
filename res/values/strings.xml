@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">PassVault</string>
     <string name="author" translatable="false">finnik</string>
-    <string name="enter_main_password">Please enter a strong main password with that all your saved passwords will be encrypted</string>
+    <string name="create_main_password">Please enter a strong main password with that all your saved passwords will be encrypted:</string>
     <string name="login" translatable="false">Login</string>
 
     <string name="generate_password">Generate</string>
@@ -37,4 +37,10 @@
     <string name="synchronized_with_drive">Synchronized with drive</string>
     <string name="error_while_synchronizing">An error occurred while synchronizing with Google Drive. Please try again, search the internet on Google status code %s or contact us(de.finnik@gmx.net).</string>
     <string name="show_password">Show password</string>
+    <string name="error_disconnecting_drive">An error occured while disconnecting from drive</string>
+    <string name="disconnected_drive">Successfully disconnected from drive</string>
+    <string name="enter_main_password">Please enter your main password</string>
+    <string name="repeat_main_pass">Please repeat the password:</string>
+    <string name="weak_main_pass">This password is too weak. Please choose a safer one</string>
+    <string name="confirm_main_pass">Confirm</string>
 </resources>

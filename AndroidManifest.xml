@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/passvault_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".gui.MainPassActivity"
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".gui.PassActivity"
             android:theme="@style/AppTheme"
@@ -26,4 +28,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

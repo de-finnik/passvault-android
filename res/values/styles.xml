@@ -6,4 +6,10 @@
         <item name="colorPrimary">@color/background</item>
         <item name="android:textColorHint">#a8a8a8</item>
     </style>
+
+    <style name="PassEditText">
+        <item name="android:background">@color/foreground</item>
+        <item name="android:textColor">@color/background</item>
+        <item name="android:padding">10dp</item>
+    </style>
 </resources>

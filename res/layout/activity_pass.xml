@@ -30,7 +30,7 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:src="@drawable/test"/>
+                android:src="@drawable/refresh_drive"/>
         </LinearLayout>
     </LinearLayout>
 

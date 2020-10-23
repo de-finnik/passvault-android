@@ -1,8 +1,9 @@
 package de.finnik.passvault.gui;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,7 +42,7 @@ import de.finnik.passvault.utils.GUIUtils;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-public class PassActivity extends AppCompatActivity {
+public class PassActivity extends AppCompatActivity implements LifecycleObserver {
     public static String password;
     public static List<Password> passwordList;
 
@@ -58,21 +63,12 @@ public class PassActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        /*ImageButton button_synchronize = findViewById(R.id.button_synchronize);
-        button_synchronize.setOnClickListener(v-> {
-            if(GoogleSignIn.getLastSignedInAccount(this)==null) {
-                signIn(v);
-            } else {
-                synchronize(this);
-            }
-        });
-        registerForContextMenu(button_synchronize);*/
         GifImageView button_synchronize = findViewById(R.id.button_synchronize);
-        this.button_synchronize_drawable = (GifDrawable) button_synchronize.getDrawable();
+        button_synchronize_drawable = (GifDrawable) button_synchronize.getDrawable();
         button_synchronize_drawable.stop();
         button_synchronize_drawable.setSpeed(4.0f);
-        button_synchronize.setOnClickListener(v-> {
-            if(GoogleSignIn.getLastSignedInAccount(this)==null) {
+        button_synchronize.setOnClickListener(v -> {
+            if (GoogleSignIn.getLastSignedInAccount(this) == null) {
                 signIn(v);
             } else {
                 synchronize(this);
@@ -81,21 +77,22 @@ public class PassActivity extends AppCompatActivity {
         registerForContextMenu(button_synchronize);
 
         synchronize(this);
+
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    boolean pause = false;
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    private void pause() {
+        pause = true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    private void pauseAndSkipToLogin() {
+        Log.i(TAG, "pauseAndSkipToLogin: "+pause);
+        if(!pause)
+            return;
         Intent intent = new Intent(PassActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -112,14 +109,31 @@ public class PassActivity extends AppCompatActivity {
         startActivityForResult(client.getSignInIntent(), 400);
     }
 
+    public void signOut() {
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
+        client.signOut().addOnCompleteListener(s -> {
+            Toast.makeText(this, getString(R.string.disconnected_drive), Toast.LENGTH_LONG).show();
+        }).addOnFailureListener(s -> {
+            Toast.makeText(this, getString(R.string.error_disconnecting_drive), Toast.LENGTH_LONG).show();
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 400) {
+        if (requestCode == 400) {
             GoogleSignIn.getSignedInAccountFromIntent(data)
                     .addOnSuccessListener(googleSignInAccount -> DriveLocalHelper.synchronize(this, googleSignInAccount))
-                    .addOnFailureListener(e-> GUIUtils.messageDialog(this, getString(R.string.error_while_synchronizing, Objects.requireNonNull(e.getMessage()).replaceAll("[^0-9]",""))));
+                    .addOnFailureListener(e -> {
+                        if (!e.getMessage().startsWith("12501"))
+                            GUIUtils.messageDialog(this, getString(R.string.error_while_synchronizing, Objects.requireNonNull(e.getMessage()).replaceAll("[^0-9]", "")));
+                    });
         }
 
 
@@ -129,13 +143,13 @@ public class PassActivity extends AppCompatActivity {
         return new AES(password);
     }
 
-    public static void synchronize(Context context) {
-        GoogleSignInAccount lastAccount = GoogleSignIn.getLastSignedInAccount(context);
-        if(lastAccount != null) {
+    public static void synchronize(Activity activity) {
+        GoogleSignInAccount lastAccount = GoogleSignIn.getLastSignedInAccount(activity);
+        if (lastAccount != null) {
             button_synchronize_drawable.start();
-            DriveLocalHelper.synchronize(context, lastAccount);
+            DriveLocalHelper.synchronize(activity, lastAccount);
         }
-        FileUtils.savePasswords(context);
+        FileUtils.savePasswords(activity);
         ManageFragment.refreshPasswords();
     }
 
@@ -144,7 +158,8 @@ public class PassActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId() == R.id.button_synchronize) {
-            menu.add(1, 0, 0, "Disconnect");
+            if (GoogleSignIn.getLastSignedInAccount(this) != null)
+                menu.add(1, 0, 0, "Disconnect");
         }
     }
 
@@ -152,13 +167,8 @@ public class PassActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem menuItem) {
         if (menuItem.getGroupId() != 1)
             return false;
-        switch (menuItem.getItemId()) {
-            case 0:
-                Toast.makeText(PassActivity.this, "Disconnected", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                break;
-
+        if (menuItem.getItemId() == 0) {
+            signOut();
         }
         return true;
     }

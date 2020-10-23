@@ -1,5 +1,6 @@
 package de.finnik.passvault.drive;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -27,14 +28,14 @@ public class DriveLocalHelper {
     private static final String TAG = "DriveLocalHelper";
     private static DriveServiceHelper mDriveServiceHelper;
 
-    public static void synchronize(Context context, GoogleSignInAccount googleSignInAccount) {
+    public static void synchronize(Activity activity, GoogleSignInAccount googleSignInAccount) {
         Log.i(TAG, "synchronize: ");
         if (mDriveServiceHelper == null) {
-            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_APPDATA));
+            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(activity, Collections.singleton(DriveScopes.DRIVE_APPDATA));
             credential.setSelectedAccount(googleSignInAccount.getAccount());
 
             Drive drive = new Drive.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential)
-                    .setApplicationName(context.getString(R.string.app_name))
+                    .setApplicationName(activity.getString(R.string.app_name))
                     .build();
 
             mDriveServiceHelper = new DriveServiceHelper(drive);
@@ -42,11 +43,11 @@ public class DriveLocalHelper {
 
         mDriveServiceHelper.fileExists().addOnSuccessListener(fileExists -> {
             if (fileExists) {
-                readPassFile(context, googleSignInAccount);
+                readPassFile(activity, googleSignInAccount);
             } else {
                 String drivePass = generateDrivePass();
-                compareAndStore(context, drivePass, new Password[0]);
-                GUIUtils.messageDialog(context, context.getString(R.string.created_drive_pass, drivePass));
+                compareAndStore(activity, drivePass, new Password[0]);
+                GUIUtils.messageDialog(activity, activity.getString(R.string.created_drive_pass, drivePass));
             }
         });
     }
@@ -55,30 +56,30 @@ public class DriveLocalHelper {
         return PasswordGenerator.generatePassword(12, PasswordGenerator.PassChars.BIG_LETTERS, PasswordGenerator.PassChars.SMALL_LETTERS, PasswordGenerator.PassChars.NUMBERS);
     }
 
-    private static void readPassFile(Context context, GoogleSignInAccount googleSignInAccount) {
+    private static void readPassFile(Activity activity, GoogleSignInAccount googleSignInAccount) {
         if (PassProperty.DRIVE_PASSWORD.getValue().isEmpty()) {
-            GUIUtils.inputDialog(context, context.getString(R.string.enter_drive_pass), drivePass -> mDriveServiceHelper.readPasswords(drivePass)
-                    .addOnSuccessListener(drivePasswords -> compareAndStore(context, drivePass, drivePasswords))
+            GUIUtils.inputDialog(activity, activity.getString(R.string.enter_drive_pass), drivePass -> mDriveServiceHelper.readPasswords(drivePass.toString())
+                    .addOnSuccessListener(drivePasswords -> compareAndStore(activity, drivePass.toString(), drivePasswords))
                     .addOnFailureListener(e -> {
                 if (e.getClass() == AES.WrongPasswordException.class) {
-                    GUIUtils.confirmDialog(context, context.getString(R.string.wrong_drive_pass), b -> {
+                    GUIUtils.confirmDialog(activity, activity.getString(R.string.wrong_drive_pass), b -> {
                         if (b) {
-                            String confirm = context.getString(R.string.confirm_deleting_drive);
-                            GUIUtils.inputDialog(context, confirm, s -> {
+                            String confirm = activity.getString(R.string.confirm_deleting_drive);
+                            GUIUtils.inputDialog(activity, confirm, s -> {
                                 if (s.equals(confirm.split("'")[1])) {
-                                    mDriveServiceHelper.deleteFile().addOnSuccessListener(nul -> synchronize(context, googleSignInAccount));
+                                    mDriveServiceHelper.deleteFile().addOnSuccessListener(nul -> synchronize(activity, googleSignInAccount));
                                 }
-                            });
+                            }, false);
                         }
                     });
                 }
-            }));
+            }), true);
         } else {
             String drivePass = PassActivity.getAES().decrypt(PassProperty.DRIVE_PASSWORD.getValue());
-            mDriveServiceHelper.readPasswords(drivePass).addOnSuccessListener(drivePasswords -> compareAndStore(context, drivePass, drivePasswords)).addOnFailureListener(e -> {
+            mDriveServiceHelper.readPasswords(drivePass).addOnSuccessListener(drivePasswords -> compareAndStore(activity, drivePass, drivePasswords)).addOnFailureListener(e -> {
                 if (e.getClass() == AES.WrongPasswordException.class) {
-                    PassProperty.DRIVE_PASSWORD.setValue(context, "");
-                    synchronize(context, googleSignInAccount);
+                    PassProperty.DRIVE_PASSWORD.setValue(activity, "");
+                    synchronize(activity, googleSignInAccount);
                 }
             });
         }

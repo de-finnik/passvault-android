@@ -108,7 +108,7 @@ public class GenerateFragment extends Fragment {
                 editText.setText("");
             }
             ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-            PassActivity.synchronize(getContext());
+            PassActivity.synchronize(getActivity());
         });
         return root;
     }

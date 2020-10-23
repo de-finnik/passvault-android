@@ -2,7 +2,6 @@ package de.finnik.passvault.gui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             openFileInput(Var.PASS_FILE);
         } catch (FileNotFoundException e) {
             // No passwords are saved -> Skip login
-            startPassActivity("", new ArrayList<>());
+            startMainPassActivity();
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -62,11 +61,12 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("pass", pass);
         intent.putExtra("passwords", new Gson().toJson(passwords.toArray(new Password[0])));
         startActivity(intent);
+        finish();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop: ");
+    private void startMainPassActivity() {
+        Intent intent = new Intent(MainActivity.this, MainPassActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
