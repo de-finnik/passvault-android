@@ -12,4 +12,14 @@
         <item name="android:textColor">@color/background</item>
         <item name="android:padding">10dp</item>
     </style>
+
+    <style name="test">
+        <item name="colorControlActivated">#FFFFFF</item>
+
+        <!-- inactive thumb color -->
+        <item name="android:thumbTint">#FFFFFF</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#595959</item>
+    </style>
 </resources>

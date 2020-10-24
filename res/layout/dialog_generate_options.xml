@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/content_padding_normal">
+    android:padding="@dimen/content_padding_normal"
+    android:background="@drawable/button_border">
 
     <TextView
         android:id="@+id/textView_password_length"
@@ -16,28 +17,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="25"
-        android:progress="0" />
+        android:progress="10"
+        android:progressTint="@color/foreground"
+        android:thumbTint="@color/foreground"/>
 
     <Switch
         android:id="@+id/switch_big_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/big_letters"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:theme="@style/test"/>
 
     <Switch
         android:id="@+id/switch_small_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/small_letters"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:theme="@style/test"/>
 
     <Switch
         android:id="@+id/switch_numbers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/numbers"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:theme="@style/test"/>
 
     <Switch
         android:id="@+id/switch_specials"
@@ -45,5 +51,6 @@
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/specials"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:theme="@style/test"/>
 </LinearLayout>

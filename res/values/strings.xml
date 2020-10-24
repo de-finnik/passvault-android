@@ -43,4 +43,7 @@
     <string name="repeat_main_pass">Please repeat the password:</string>
     <string name="weak_main_pass">This password is too weak. Please choose a safer one</string>
     <string name="confirm_main_pass">Confirm</string>
+    <string name="question_mark" translatable="false">\?</string>
+    <string name="accept" translatable="false">OK</string>
+    <string name="decline">Cancel</string>
 </resources>

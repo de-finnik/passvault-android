@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@drawable/button_border"
     android:padding="10dp">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +13,8 @@
         <ImageView
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:src="@drawable/question_mark" />
+            android:src="@drawable/question_mark"
+            android:contentDescription="@string/question_mark" />
 
         <TextView
             android:id="@+id/textView_message"
@@ -36,13 +36,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@color/background"
-            android:src="@drawable/check_mark" />
+            android:src="@drawable/check_mark"
+            android:contentDescription="@string/accept" />
         <ImageView
             android:id="@+id/button_decline_confirm"
             android:layout_width="50dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:layout_height="40dp"
             android:background="@color/background"
-            android:src="@drawable/close" />
+            android:src="@drawable/close"
+            android:contentDescription="@string/decline" />
     </LinearLayout>
 </LinearLayout>

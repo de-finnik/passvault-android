@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 startPassActivity(pass, Password.readPasswords(openFileInput(Var.PASS_FILE), pass));
             } catch (AES.WrongPasswordException e) {
                 GUIUtils.messageDialog(this, R.string.wrong_pass);
+                et.setText("");
             } catch (IOException e) {
                 e.printStackTrace();
                 startPassActivity("", new ArrayList<>());

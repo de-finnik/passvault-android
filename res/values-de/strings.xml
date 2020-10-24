@@ -41,4 +41,5 @@
     <string name="repeat_main_pass">Bitte Passwort erneut eingeben:</string>
     <string name="weak_main_pass">Dieses Passwort ist zu schwach: Bitte wähle ein stärkeres</string>
     <string name="confirm_main_pass">Bestätigen</string>
+    <string name="decline">Abbrechen</string>
 </resources>
