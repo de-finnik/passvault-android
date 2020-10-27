@@ -74,6 +74,34 @@ public class PasswordGenerator {
             return "";
         }
 
+        public PassProperty getMatchingProp() {
+            switch (this) {
+                case BIG_LETTERS:
+                    return PassProperty.GEN_BIG;
+                case SMALL_LETTERS:
+                    return PassProperty.GEN_SMALL;
+                case NUMBERS:
+                    return PassProperty.GEN_NUM;
+                case SPECIAL_CHARACTERS:
+                    return PassProperty.GEN_SPE;
+            }
+            return null;
+        }
+
+        public static PassChars getMatchingChar(PassProperty passProperty) {
+            switch (passProperty) {
+                case GEN_BIG:
+                    return BIG_LETTERS;
+                case GEN_SMALL:
+                    return SMALL_LETTERS;
+                case GEN_NUM:
+                    return NUMBERS;
+                case GEN_SPE:
+                    return SPECIAL_CHARACTERS;
+            }
+            return null;
+        }
+
         public boolean contains(String s) {
             return Arrays.stream(get().split("")).anyMatch(s::contains);
         }

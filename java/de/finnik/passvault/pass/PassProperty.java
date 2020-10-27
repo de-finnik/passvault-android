@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 public enum PassProperty {
-    LANG, DRIVE_PASSWORD;
+    LANG, DRIVE_PASSWORD, GEN_LENGTH, GEN_BIG, GEN_SMALL, GEN_NUM, GEN_SPE;
     private static final String TAG = "PassProperty";
 
     /**
@@ -98,6 +98,10 @@ public enum PassProperty {
                 return Arrays.asList(availableLanguages).contains(systemLang) ? systemLang : "en";
             case DRIVE_PASSWORD:
                 return "";
+            case GEN_BIG:case GEN_SMALL:case GEN_NUM:case GEN_SPE:
+                return "true";
+            case GEN_LENGTH:
+                return "12";
         }
         return null;
     }
@@ -114,6 +118,11 @@ public enum PassProperty {
                 return Arrays.asList(availableLanguages).contains(value);
             case DRIVE_PASSWORD:
                 return value != null;
+            case GEN_BIG:case GEN_SMALL:case GEN_NUM:case GEN_SPE:
+                return value.equals("true") || value.equals("false");
+            case GEN_LENGTH:
+                int z = Integer.parseInt(value);
+                return z >= 5 && z <= 30;
             default:
                 return false;
         }

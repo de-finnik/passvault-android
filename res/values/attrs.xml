@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CharSwitch">
+        <attr name="passChar" format="enum">
+            <enum name="BIG_LETTERS" value="0"/>
+            <enum name="SMALL_LETTERS" value="1"/>
+            <enum name="NUMBERS" value="2"/>
+            <enum name="SPECIAL_CHARACTERS" value="3"/>
+        </attr>
+    </declare-styleable>
+</resources>

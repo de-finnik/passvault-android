@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/content_padding_normal"
-    android:background="@drawable/button_border">
+    android:background="@drawable/button_border"
+    android:id="@+id/linear_generate_options">
 
     <TextView
         android:id="@+id/textView_password_length"
@@ -19,38 +20,41 @@
         android:max="25"
         android:progress="10"
         android:progressTint="@color/foreground"
-        android:thumbTint="@color/foreground"/>
+        android:thumbTint="@color/foreground" />
 
-    <Switch
+    <de.finnik.passvault.gui.CharSwitch
         android:id="@+id/switch_big_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/big_letters"
         android:textSize="20sp"
-        android:theme="@style/test"/>
+        android:theme="@style/test"
+        app:passChar="BIG_LETTERS"/>
 
-    <Switch
+    <de.finnik.passvault.gui.CharSwitch
         android:id="@+id/switch_small_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/small_letters"
         android:textSize="20sp"
-        android:theme="@style/test"/>
+        android:theme="@style/test"
+        app:passChar="SMALL_LETTERS" />
 
-    <Switch
+    <de.finnik.passvault.gui.CharSwitch
         android:id="@+id/switch_numbers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/numbers"
         android:textSize="20sp"
-        android:theme="@style/test"/>
+        android:theme="@style/test"
+        app:passChar="NUMBERS"/>
 
-    <Switch
+    <de.finnik.passvault.gui.CharSwitch
         android:id="@+id/switch_specials"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
         android:text="@string/specials"
         android:textSize="20sp"
-        android:theme="@style/test"/>
+        android:theme="@style/test"
+        app:passChar="SPECIAL_CHARACTERS"/>
 </LinearLayout>

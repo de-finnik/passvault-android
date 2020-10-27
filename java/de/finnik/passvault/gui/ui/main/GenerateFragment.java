@@ -10,35 +10,42 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Objects;
 
 import de.finnik.passvault.R;
+import de.finnik.passvault.gui.CharSwitch;
 import de.finnik.passvault.gui.PassActivity;
+import de.finnik.passvault.pass.PassProperty;
 import de.finnik.passvault.pass.Password;
 import de.finnik.passvault.pass.PasswordGenerator;
 
 public class GenerateFragment extends Fragment {
-    private int password_length;
-    private Map<String, Boolean> characters = new HashMap<>();
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_generate, container, false);
-        root.findViewById(R.id.button_generate_options).setOnClickListener(view->{
+        root.findViewById(R.id.button_generate_options).setOnClickListener(view -> {
             View layout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_generate_options, null);
-            AlertDialog generate_options = new AlertDialog.Builder(getContext()).setView(layout).create();
+            LinearLayout linearLayout = layout.findViewById(R.id.linear_generate_options);
+            AlertDialog generate_options = new AlertDialog.Builder(getContext()).setView(layout).setOnCancelListener(dialog -> {
+                for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                    View childAt = linearLayout.getChildAt(i);
+                    if (childAt.getClass() == CharSwitch.class) {
+                        CharSwitch charSwitch = (CharSwitch) childAt;
+                        assert charSwitch.getPassChars().getMatchingProp() != null;
+                        charSwitch.getPassChars().getMatchingProp().setValue(getContext(), charSwitch.isChecked());
+                    }
+                }
+            }).create();
             generate_options.setContentView(layout);
             generate_options.show();
 
@@ -47,67 +54,52 @@ public class GenerateFragment extends Fragment {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     int newLength = progress + 5;
-                    GenerateFragment.this.password_length = newLength;
+                    PassProperty.GEN_LENGTH.setValue(getContext(), newLength);
                     ((TextView) layout.findViewById(R.id.textView_password_length)).setText(getString(R.string.password_length, newLength));
                 }
-
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
-
                 }
-
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
                 }
             });
-            password_length.setProgress(GenerateFragment.this.password_length-5);
-            Switch[] switches = new Switch[]{layout.findViewById(R.id.switch_big_letters),layout.findViewById(R.id.switch_small_letters),layout.findViewById(R.id.switch_numbers),layout.findViewById(R.id.switch_specials)};
-            for (Switch s :switches){
-                s.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    GenerateFragment.this.characters.put(s.getText().toString(), isChecked);
-                });
-                s.setChecked(GenerateFragment.this.characters.get(s.getText()));
+            password_length.setProgress(Integer.parseInt(PassProperty.GEN_LENGTH.getValue()) - 5);
+
+            for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                if (linearLayout.getChildAt(i).getClass() == CharSwitch.class) {
+                    CharSwitch charSwitch = ((CharSwitch) linearLayout.getChildAt(i));
+                    assert charSwitch.getPassChars().getMatchingProp() != null;
+                    charSwitch.setChecked(Boolean.parseBoolean(charSwitch.getPassChars().getMatchingProp().getValue()));
+                }
             }
         });
-        password_length = 12;
-        characters.put(getString(R.string.big_letters), true);
-        characters.put(getString(R.string.small_letters), true);
-        characters.put(getString(R.string.numbers), true);
-        characters.put(getString(R.string.specials), false);
-        root.findViewById(R.id.button_generate).setOnClickListener(v->{
-            List<PasswordGenerator.PassChars> passChars = new ArrayList<>();
-            characters.forEach((s,b)->{
-                if(b) {
-                    if(s.equals(getString(R.string.big_letters))) {
-                        passChars.add(PasswordGenerator.PassChars.BIG_LETTERS);
-                    } else if(s.equals(getString(R.string.small_letters))) {
-                        passChars.add(PasswordGenerator.PassChars.SMALL_LETTERS);
-                    } else if(s.equals(getString(R.string.numbers))) {
-                        passChars.add(PasswordGenerator.PassChars.NUMBERS);
-                    } else if(s.equals(getString(R.string.specials))) {
-                        passChars.add(PasswordGenerator.PassChars.SPECIAL_CHARACTERS);
-                    }
-                }
-            });
-            String password = PasswordGenerator.generatePassword(password_length, passChars.toArray(new PasswordGenerator.PassChars[0]));
+        Button btnGenerate = root.findViewById(R.id.button_generate);
+        btnGenerate.setOnClickListener(v -> {
+            PasswordGenerator.PassChars[] passChars = Arrays.stream(PassProperty.values())
+                    .filter(prop -> prop.name().startsWith("GEN"))
+                    .filter(prop -> Boolean.parseBoolean(prop.getValue()))
+                    .map(PasswordGenerator.PassChars::getMatchingChar)
+                    .toArray(PasswordGenerator.PassChars[]::new);
+            String password = PasswordGenerator.generatePassword(Integer.parseInt(PassProperty.GEN_LENGTH.getValue()), passChars);
             ((EditText) root.findViewById(R.id.edit_text_pass)).setText(password);
         });
-        Button save = root.findViewById(R.id.button_save);
+
+        Button btnSave = root.findViewById(R.id.button_save);
         ((EditText) root.findViewById(R.id.edit_text_other)).setOnEditorActionListener((v, actionId, event) -> {
-            if(actionId == EditorInfo.IME_ACTION_DONE) {
-                save.callOnClick();
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                btnSave.callOnClick();
             }
             return false;
         });
-        save.setOnClickListener(v->{
-            EditText[] editTexts = new EditText[]{root.findViewById(R.id.edit_text_pass),root.findViewById(R.id.edit_text_site),root.findViewById(R.id.edit_text_user),root.findViewById(R.id.edit_text_other)};
-            Password password = new Password(editTexts[0].getText().toString(),editTexts[1].getText().toString(),editTexts[2].getText().toString(),editTexts[3].getText().toString());
+        btnSave.setOnClickListener(v -> {
+            EditText[] editTexts = new EditText[]{root.findViewById(R.id.edit_text_pass), root.findViewById(R.id.edit_text_site), root.findViewById(R.id.edit_text_user), root.findViewById(R.id.edit_text_other)};
+            Password password = new Password(editTexts[0].getText().toString(), editTexts[1].getText().toString(), editTexts[2].getText().toString(), editTexts[3].getText().toString());
             PassActivity.passwordList.add(password);
             for (EditText editText : editTexts) {
                 editText.setText("");
             }
-            ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+            ((InputMethodManager) Objects.requireNonNull(Objects.requireNonNull(getContext()).getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
             PassActivity.synchronize(getActivity());
         });
         return root;
