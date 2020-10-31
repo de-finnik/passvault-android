@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="create_main_password">Bitte gib ein starkes Hauptpasswort ein, mit dem alle deine gespeicherten Passwörter verschlüsselt werden:</string>
+    <string name="create_main_password">Denke dir ein sicheres Passwort aus, mit dem alle deine Passwörter verschlüsselt werden:</string>
 
     <string name="generate_password">Generieren</string>
     <string name="manage_passwords">Verwalten</string>
@@ -17,29 +17,43 @@
     <string name="user">Benutzername/Email</string>
     <string name="other">Andere Informationen</string>
 
-    <string name="save">Speichern</string>
+    <string name="save">Speichern und kopieren</string>
 
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="delete">Löschen</string>
 
-    <string name="confirm_deleting_password">Do you want to delete this password?</string>
+    <string name="confirm_deleting_password">Bist du dir sicher, dass du dieses Passwort löschen willst?</string>
 
-    <string name="more">More</string>
-    <string name="search">Search</string>
-    <string name="wrong_pass">Wrong password!</string>
+    <string name="more">Mehr</string>
+    <string name="search">Suchen</string>
+    <string name="wrong_pass">Falsches Passwort!</string>
 
-    <string name="created_drive_pass">Successfully created drive password, with that your passwords on Google Drive will be encrypted: %s</string>
-    <string name="enter_drive_pass">Please enter your drive password, with that your passwords on Google Drive are encrypted:</string>
-    <string name="wrong_drive_pass">Wrong password! Do you want to delete your drive passwords in order to create a new drive password?</string>
-    <string name="confirm_deleting_drive">If you are sure enter \'CONFIRM\'</string>
-    <string name="synchronized_with_drive">Synchronized with drive</string>
-    <string name="error_while_synchronizing">Bei der Synchronisierung mit Google Drive ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut, suchen Sie im Internet nach dem Google-Statuscode %s oder kontaktieren Sie uns (de.finnik@gmx.net). </string>
+    <string name="created_drive_pass">Wir haben ein neues Passwort für dich erstellt, mit dem deine Passwörter in deinem Google Drive verschlüsselt werden: %s. Notiere es dir, sodass du von überall Zugriff auf deine Drive Passwörter bekommst!</string>
+    <string name="enter_drive_pass">Bitte gib das Passwort ein, mit dem deine Passwörter in deinem Google Drive verschlüsselt sind:</string>
+    <string name="wrong_drive_pass">Dies ist nicht das richtige Google Drive Passwort. Willst du alle deine online gespeicherten Passwörter löschen, um ein neues Google Drive Passwort zu erhalten?</string>
+    <string name="confirm_deleting_drive">Wenn du fortfährst, werden alle in deinem Google Drive gespeicherten Passwörter gelöscht. Wenn du dir darüber im Klaren bist und fortfahren willst, gib bitte \'BESTÄTIGEN\' ein:</string>
+    <string name="synchronized_with_drive">Mit Google Drive synchronisiert</string>
+    <string name="error_while_synchronizing">"Bei der Synchronisierung mit Google Drive ist ein Fehler aufgetreten. Bitte versuche es erneut, suche im Internet nach dem Google-Statuscode %s oder kontaktiere uns (kontakt@finnik.de). "</string>
     <string name="show_password">Passwort anzeigen</string>
     <string name="error_disconnecting_drive">Beim Trennen von Google Drive ist ein Fehler aufgetreten</string>
     <string name="disconnected_drive">Erfolgreich von Google Drive getrennt</string>
-    <string name="enter_main_password">Bitte Hauptpasswort eingeben</string>
-    <string name="repeat_main_pass">Bitte Passwort erneut eingeben:</string>
+    <string name="enter_main_password">Bitte gib dein Hauptpasswort ein</string>
+    <string name="repeat_main_pass">Bitte gib dein neues Hauptpasswort erneut ein:</string>
     <string name="weak_main_pass">Dieses Passwort ist zu schwach: Bitte wähle ein stärkeres</string>
     <string name="confirm_main_pass">Bestätigen</string>
     <string name="decline">Abbrechen</string>
+    <string name="about">Über uns und Hilfe</string>
+    <string name="disconnect_drive">Von Drive trennen</string>
+    <string name="onboarding_next">WEITER</string>
+    <string name="onboarding_skip">ÜBERSPRINGEN</string>
+    <string name="onboarding_got_it">ALLES KLAR</string>
+    <string name="onboarding_welcome">Herzlich Willkommen bei PassVault!\n\nWir sind froh, dass du den Weg hierhin gefunden hast und wünschen dir viel Spass mit dem Passwort-Manager. Die folgenden Seiten werden dir die Grundfunktionen der App beibringen und falls du anschließend noch Fragen hast, melde dich gerne bei uns:  <a href="mailto:kontakt@finnik.de">kontakt@finnik.de</a></string>
+    <string name="onboarding_master_password_description">Deine erste Aufgabe wird es sein, dir ein starkes Hauptpasswort auszudenken. Mit diesem Passwort werden alle deine Passwörter später verschüsselt. Achte daher darauf, dass das Passwort sicher genug ist: PassVault wird dir helfen, die Stärke des Passworts einzuschätzen!</string>
+    <string name="onboarding_master_password">Hauptpasswort</string>
+    <string name="onboarding_store_passwords">Passwörter abspeichern</string>
+    <string name="onboarding_store_passwords_description">Dies ist die Startseite von PassVault.\nHier kannst du Passwörter abspeichern: Entweder gibst du ein Passwort ein oder du lässt dir eines generieren! Anschließend kannst du noch weitere Informationen zu dem Passwort abspeichern, wie z.B. die Webseite, bei der du das Passwort benutzt, oder die zum Passwort gehörende Email-Adresse. Nach dem Speichern wird das Passwort automatisch in deine Zwischenablage kopiert, sodass du es direkt weiterverwenden kannst.</string>
+    <string name="onboarding_manage">Passwörter verwalten</string>
+    <string name="onboarding_manage_description">Auf dieser Seite kannst du deine gespeicherten Passwörter verwalten! Hier kannst du Passwörter suchen, indem du in das Suchfeld z.B. die zu dem Passwort gespeicherte Seite eingibst. Hast du das richtige Passwort gefunden, kannst du es per Klick direkt in deine Zwischenablage kopieren, sodass du es anschließend direkt weiterverwenden kannst. Weitere Optionen öffnen sich, wenn du das Passwort gedrückt hältst. In dem sich öffnenden Dialog kannst du das Passwort anzeigen lassen, es bearbeiten oder sogar löschen.</string>
+    <string name="onboarding_drive_description">Falls du deine Passwörter über mehrere Geräte synchronisieren willst, ist dies über Google Drive möglich. Um die Synchronisation einzurichten, drücke später auf das Drive Logo und melde dich mit deinem Google Konto an. Wenn du dein Google-Konto bereits einmal mit PassVault verbunden hast, musst du nun das Passwort eingeben, mit dem die Passwörter auf Google Drive verschlüsselt sind. Wenn du PassVault das erste Mal mit Google Drive verknüpfen willst, wird ein Passwort generiert, mit dem die Passwörter auf Google Drive verschlüsselt werden.</string>
+    <string name="onboarding_drive">Mit Google Drive synchonisieren</string>
 </resources>

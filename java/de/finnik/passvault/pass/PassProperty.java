@@ -30,7 +30,7 @@ public enum PassProperty {
         try {
             properties.load(context.openFileInput(FILE));
         } catch (IOException e) {
-            Log.e(TAG, "load: Error while loading application properties!",e);
+            Log.e(TAG, "load: Error while loading application properties!", e);
         }
 
         for (PassProperty property : PassProperty.values()) {
@@ -69,17 +69,22 @@ public enum PassProperty {
      */
     public boolean setValue(Context context, Object value) {
         String s = String.valueOf(value);
-        if (matches(s)) {
-            if (this.value == null) {
-                Log.i(TAG, "setValue: Loaded property "+this.name()+": "+s);
-            } else {
-                Log.i(TAG, "setValue: Set property "+this.name()+": "+s);
+        try {
+            if (matches(s)) {
+                if (this.value == null) {
+                    Log.i(TAG, "setValue: Loaded property " + this.name() + ": " + s);
+                } else {
+                    Log.i(TAG, "setValue: Set property " + this.name() + ": " + s);
+                }
+                this.value = s;
+            } else if (this.value == null) {
+                this.value = getDefault();
             }
-            this.value = s;
-        } else if (this.value == null) {
+            store(context);
+        } catch (Exception e) {
             this.value = getDefault();
+            return false;
         }
-        store(context);
         return matches(s);
     }
 
@@ -98,7 +103,10 @@ public enum PassProperty {
                 return Arrays.asList(availableLanguages).contains(systemLang) ? systemLang : "en";
             case DRIVE_PASSWORD:
                 return "";
-            case GEN_BIG:case GEN_SMALL:case GEN_NUM:case GEN_SPE:
+            case GEN_BIG:
+            case GEN_SMALL:
+            case GEN_NUM:
+            case GEN_SPE:
                 return "true";
             case GEN_LENGTH:
                 return "12";
@@ -118,7 +126,10 @@ public enum PassProperty {
                 return Arrays.asList(availableLanguages).contains(value);
             case DRIVE_PASSWORD:
                 return value != null;
-            case GEN_BIG:case GEN_SMALL:case GEN_NUM:case GEN_SPE:
+            case GEN_BIG:
+            case GEN_SMALL:
+            case GEN_NUM:
+            case GEN_SPE:
                 return value.equals("true") || value.equals("false");
             case GEN_LENGTH:
                 int z = Integer.parseInt(value);

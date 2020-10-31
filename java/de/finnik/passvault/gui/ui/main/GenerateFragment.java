@@ -3,6 +3,7 @@ package de.finnik.passvault.gui.ui.main;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,7 @@ public class GenerateFragment extends Fragment {
                     .filter(prop -> Boolean.parseBoolean(prop.getValue()))
                     .map(PasswordGenerator.PassChars::getMatchingChar)
                     .toArray(PasswordGenerator.PassChars[]::new);
+            Log.i("TAG", "onCreateView: "+PassProperty.GEN_LENGTH.getValue());
             String password = PasswordGenerator.generatePassword(Integer.parseInt(PassProperty.GEN_LENGTH.getValue()), passChars);
             ((EditText) root.findViewById(R.id.edit_text_pass)).setText(password);
         });

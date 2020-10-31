@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_main_password">Pense à un mot de passe sécurisé qui va crypter tous tes mots de passe :</string>
+    <string name="generate_password">Générer</string>
+    <string name="manage_passwords">Gérer</string>
+    <string name="password_length">Longueur du mot de passe: %d</string>
+    <string name="big_letters">Lettres majuscules</string>
+    <string name="small_letters">Lettres minuscules</string>
+    <string name="numbers">Nombres</string>
+    <string name="specials">Caractères spécials</string>
+    <string name="pass">Mot de passe</string>
+    <string name="site">Page Web:</string>
+    <string name="user">Utilisateur/Émail:</string>
+    <string name="other">Autres informations:</string>
+    <string name="save">Sauvegarder et copier</string>
+    <string name="edit">Adapter</string>
+    <string name="delete">Effacer</string>
+    <string name="confirm_deleting_password">Es-tu sûr de vouloir effacer ce mot de passe?</string>
+    <string name="more">Plus</string>
+    <string name="search">Chercher</string>
+    <string name="wrong_pass">Mauvais mot de passe!</string>
+    <string name="created_drive_pass">Nous avons créé pour vous un mot de passe avec lequel vos mots de passe dans votre Google Drive seront cryptés : %s. Veuillez le noter afin que vous puissiez accéder aux mots de passe de votre Google Drive depuis n\'importe où !</string>
+    <string name="enter_drive_pass">Entres le mot de passe avec lequel vos mots de passe dans Google Drive sont cryptés:</string>
+    <string name="wrong_drive_pass">C\'est pas le mot de passe du Google Drive correct. Veux-tu effacer tous tes mots de passe enregistrés en Google Drive afin d\'obtenir un nouveau mot de passe pour ton Google Drive?</string>
+    <string name="confirm_deleting_drive">En continuant, vous effacez tous les mots de passe enregistrés dans votre Google Drive. Si vous êtes sûr, entres \'CONFIRMER\':</string>
+    <string name="synchronized_with_drive">Synchronisé avec Google Drive</string>
+    <string name="error_while_synchronizing">Une erreur est survenue lors de la synchronisation avec Google Drive. Veuille réessayer, recherches le code d’état Google %s sur Internet ou contactes-nous (contact@finnik.de).</string>
+    <string name="show_password">Afficher le mot de passe</string>
+    <string name="error_disconnecting_drive">Une erreur s’est produite lors de la déconnexion de Google Drive</string>
+    <string name="disconnected_drive">Déconnexion réussie de Google Drive</string>
+    <string name="enter_main_password">Entres ton mot de passe principal</string>
+    <string name="repeat_main_pass">Entres ton nouveau mot de passe principal un deuxième fois:</string>
+    <string name="weak_main_pass">Ce mot de passe est trop faible. Veuille choisir une mot de passe plus difficile à deviner.</string>
+    <string name="confirm_main_pass">Confirmer</string>
+    <string name="decline">Annuler</string>
+    <string name="about">À propos de nous et aide</string>
+    <string name="disconnect_drive">Séparer de Google Drive</string>
+    <string name="onboarding_next">CONTINUER</string>
+    <string name="onboarding_skip">SAUTER</string>
+    <string name="onboarding_got_it">TRÈS BIEN</string>
+    <string name="onboarding_welcome">Bienvenue chez PassVault!\n\nNous sommes heureux que tu aies trouvé le moyen d’y arriver et nous te souhaitons beaucoup de plaisir avec le gestionnaire de mots de passe. Les pages suivantes te expliqueront les fonctions de base de l’application et si tu as des questions, contactes-nous à l’adresse suivante: <a href="mailto:contact@finnik.de">contact@finnik.de</a></string>
+    <string name="onboarding_master_password_description">Ton première tâche sera de te trouver un mot de passe principal fort. Avec ce mot de passe, tous tes mots de passe seront cryptés par la suite. Assures-toi donc que le mot de passe est suffisamment sûr: PassVault te aidera à évaluer la force du mot de passe!</string>
+    <string name="onboarding_master_password">Mot de passe principal</string>
+    <string name="onboarding_store_passwords">Sauvegarder des mots de passe</string>
+    <string name="onboarding_store_passwords_description">C\'est la page d\'accueil de PassVault.\nIci tu peux enregistrer des mots de passe : soit tu entres un mot de passe, soit tu en fais générer un ! Tu peux ensuite enregistrer d\'autres informations sur le mot de passe, comme par exemple le site web où tu utilises le mot de passe, ou l\'adresse électronique associée au mot de passe. Après l\'enregistrement, le mot de passe est automatiquement copié dans ton presse-papiers afin que tu puisses continuer à l\'utiliser immédiatement.</string>
+    <string name="onboarding_manage">Gérer tes mots de passe</string>
+    <string name="onboarding_manage_description">Sur cette page, tu peux gérer tes mots de passe enregistrés! Ici, tu peux rechercher des mots de passe en entrant des mots-clès dans le champ de recherche par exemple la page enregistrée avec le mot de passe. Si tu as trouvé le bon mot de passe, tu peux le copier directement dans ta presse-papier en cliquant dessus pour pouvoir ensuite l’utiliser directement. D’autres options s’ouvrent si tu laisses le mot de passe enfoncé. Dans la boîte de dialogue qui s’ouvre, tu peux afficher le mot de passe, le modifier ou même le supprimer.</string>
+    <string name="onboarding_drive_description">Si tu souhaites synchroniser tes mots de passe sur plusieurs appareils, tu peux le faire via Google Drive. Pour configurer la synchronisation, presses plus tard le logo Drive et connectes-toi à l’aide de ton compte Google. Si tu as déjà associé votre compte Google à PassVault, tu dois maintenant saisir le mot de passe qui crypte les mots de passe sur Google Drive. Si tu souhaites associer PassVault pour la première fois à Google Drive, un mot de passe est généré pour chiffrer les mots de passe sur Google Drive.</string>
+    <string name="onboarding_drive">Synchroniser avec Google Drive</string>
+</resources>

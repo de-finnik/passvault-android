@@ -21,6 +21,7 @@ import com.nulabinc.zxcvbn.Zxcvbn;
 import java.util.ArrayList;
 
 import de.finnik.passvault.R;
+import de.finnik.passvault.gui.onboarding.OnboardingActivity;
 import de.finnik.passvault.pass.Password;
 import de.finnik.passvault.utils.GUIUtils;
 
@@ -53,6 +54,9 @@ public class MainPassActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        Intent intent = new Intent(this, OnboardingActivity.class);
+        startActivity(intent);
     }
 
     private void setProgressColor(int c) {

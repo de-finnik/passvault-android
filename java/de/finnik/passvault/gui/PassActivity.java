@@ -2,11 +2,13 @@ package de.finnik.passvault.gui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -76,6 +78,9 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         });
         registerForContextMenu(button_synchronize);
 
+        ImageView imageViewLogo = findViewById(R.id.imageViewLogo);
+        registerForContextMenu(imageViewLogo);
+
         synchronize(this);
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -90,8 +95,8 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private void pauseAndSkipToLogin() {
-        Log.i(TAG, "pauseAndSkipToLogin: "+pause);
-        if(!pause)
+        Log.i(TAG, "pauseAndSkipToLogin: " + pause);
+        if (!pause)
             return;
         Intent intent = new Intent(PassActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -159,16 +164,23 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId() == R.id.button_synchronize) {
             if (GoogleSignIn.getLastSignedInAccount(this) != null)
-                menu.add(1, 0, 0, "Disconnect");
+                menu.add(1, 0, 0, R.string.disconnect_drive);
+        } else if (v.getId() == R.id.imageViewLogo) {
+            menu.add(2, 0,0, R.string.about);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
-        if (menuItem.getGroupId() != 1)
+        if (menuItem.getGroupId() == 1) {
+            if (menuItem.getItemId() == 0) {
+                signOut();
+            }
+        } else if(menuItem.getGroupId() == 2) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://finnik.de/passvault"));
+            startActivity(browserIntent);
+        } else {
             return false;
-        if (menuItem.getItemId() == 0) {
-            signOut();
         }
         return true;
     }
