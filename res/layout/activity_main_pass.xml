@@ -53,20 +53,11 @@
         android:progress="100"
         android:progressTint="@color/red"/>
 
-    <Button
-        android:id="@+id/button_confirm_main_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/confirm_main_pass"
-        android:background="@drawable/button_border"
-        android:onClick="confirm"
-        android:layout_marginTop="5dp"/>
-
     <TextView
         android:id="@+id/textView_repeat_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:text="@string/repeat_main_pass"
         android:fontFamily="@font/raleway"
         android:textSize="18sp"
@@ -83,6 +74,15 @@
         android:inputType="textPassword"
         android:padding="@dimen/content_padding_normal"
         android:textColor="@color/background"
-        android:visibility="invisible">
+        android:visibility="gone">
     </EditText>
+
+    <Button
+        android:id="@+id/button_confirm_main_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_main_pass"
+        android:background="@drawable/button_border"
+        android:onClick="confirm"
+        android:layout_marginTop="5dp"/>
 </LinearLayout>

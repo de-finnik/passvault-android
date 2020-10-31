@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.nulabinc.zxcvbn.Zxcvbn;
 
-import java.util.ArrayList;
-
 import de.finnik.passvault.R;
 import de.finnik.passvault.gui.onboarding.OnboardingActivity;
 import de.finnik.passvault.pass.Password;
@@ -55,8 +53,10 @@ public class MainPassActivity extends AppCompatActivity {
             return false;
         });
 
-        Intent intent = new Intent(this, OnboardingActivity.class);
-        startActivity(intent);
+        if(getIntent().getBooleanExtra("showOnboarding", true)) {
+            Intent intent = new Intent(this, OnboardingActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void setProgressColor(int c) {
@@ -70,7 +70,17 @@ public class MainPassActivity extends AppCompatActivity {
             if (input_first.getText().toString().equals(input_repeat.getText().toString())) {
                 Intent intent = new Intent(this, PassActivity.class);
                 intent.putExtra("pass", input_first.getText().toString());
-                intent.putExtra("passwords", new Gson().toJson(new ArrayList<Password>()));
+                Password[] passwords = new Password[0];
+
+                if (getIntent().getExtras().containsKey("passwords")) {
+                    passwords = new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class);
+                }
+
+                if(getIntent().getExtras().containsKey("drivePass")) {
+                    intent.putExtra("drivePass", getIntent().getStringExtra("drivePass"));
+                }
+
+                intent.putExtra("passwords", new Gson().toJson(passwords));
                 startActivity(intent);
                 finish();
             } else {
@@ -78,8 +88,6 @@ public class MainPassActivity extends AppCompatActivity {
             }
         } else if (new Zxcvbn().measure(input_first.getText()).getScore() > 2) {
             input_first.setEnabled(false);
-            layout.removeView(button_confirm);
-            layout.addView(button_confirm);
 
             findViewById(R.id.textView_repeat_main).setVisibility(View.VISIBLE);
             input_repeat.setVisibility(View.VISIBLE);
@@ -99,11 +107,9 @@ public class MainPassActivity extends AppCompatActivity {
 
     private void hideRepeat() {
         input_first.setOnKeyListener(null);
-        findViewById(R.id.textView_repeat_main).setVisibility(View.INVISIBLE);
-        input_repeat.setVisibility(View.INVISIBLE);
+        findViewById(R.id.textView_repeat_main).setVisibility(View.GONE);
+        input_repeat.setVisibility(View.GONE);
         input_repeat.setText("");
-        layout.removeView(button_confirm);
-        layout.addView(button_confirm, 5);
     }
 
     private void setupInputFirst() {

@@ -42,7 +42,7 @@
     <string name="weak_main_pass">Dieses Passwort ist zu schwach: Bitte wähle ein stärkeres</string>
     <string name="confirm_main_pass">Bestätigen</string>
     <string name="decline">Abbrechen</string>
-    <string name="about">Über uns und Hilfe</string>
+    <string name="about">Über uns und mehr Hilfe</string>
     <string name="disconnect_drive">Von Drive trennen</string>
     <string name="onboarding_next">WEITER</string>
     <string name="onboarding_skip">ÜBERSPRINGEN</string>
@@ -56,4 +56,10 @@
     <string name="onboarding_manage_description">Auf dieser Seite kannst du deine gespeicherten Passwörter verwalten! Hier kannst du Passwörter suchen, indem du in das Suchfeld z.B. die zu dem Passwort gespeicherte Seite eingibst. Hast du das richtige Passwort gefunden, kannst du es per Klick direkt in deine Zwischenablage kopieren, sodass du es anschließend direkt weiterverwenden kannst. Weitere Optionen öffnen sich, wenn du das Passwort gedrückt hältst. In dem sich öffnenden Dialog kannst du das Passwort anzeigen lassen, es bearbeiten oder sogar löschen.</string>
     <string name="onboarding_drive_description">Falls du deine Passwörter über mehrere Geräte synchronisieren willst, ist dies über Google Drive möglich. Um die Synchronisation einzurichten, drücke später auf das Drive Logo und melde dich mit deinem Google Konto an. Wenn du dein Google-Konto bereits einmal mit PassVault verbunden hast, musst du nun das Passwort eingeben, mit dem die Passwörter auf Google Drive verschlüsselt sind. Wenn du PassVault das erste Mal mit Google Drive verknüpfen willst, wird ein Passwort generiert, mit dem die Passwörter auf Google Drive verschlüsselt werden.</string>
     <string name="onboarding_drive">Mit Google Drive synchonisieren</string>
+    <string name="settings">EINSTELLUNGEN</string>
+    <string name="change_master_password">Hauptpasswort ändern</string>
+    <string name="show_drive_password">Dein Google Drive Passwort</string>
+    <string name="show_onboarding">Hilfe anzeigen</string>
+    <string name="contact_us">Kontaktiere uns</string>
+    <string name="drive_password">Dein Google Drive Passwort ist: %s</string>
 </resources>

@@ -1,13 +1,14 @@
 package de.finnik.passvault.gui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,8 +37,10 @@ import java.util.Objects;
 import de.finnik.passvault.AES.AES;
 import de.finnik.passvault.R;
 import de.finnik.passvault.drive.DriveLocalHelper;
+import de.finnik.passvault.gui.onboarding.OnboardingActivity;
 import de.finnik.passvault.gui.ui.main.ManageFragment;
 import de.finnik.passvault.gui.ui.main.SectionsPagerAdapter;
+import de.finnik.passvault.pass.PassProperty;
 import de.finnik.passvault.pass.Password;
 import de.finnik.passvault.utils.FileUtils;
 import de.finnik.passvault.utils.GUIUtils;
@@ -56,6 +59,9 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         password = getIntent().getStringExtra("pass");
         passwordList = new ArrayList<>();
         passwordList.addAll(Arrays.asList(new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class)));
+        if(getIntent().getExtras().containsKey("drivePass")) {
+            PassProperty.DRIVE_PASSWORD.setValue(this, getAES().encrypt(getIntent().getStringExtra("drivePass")));
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pass);
 
@@ -64,6 +70,9 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        ImageView button_settings = findViewById(R.id.btn_settings);
+        button_settings.setOnClickListener(v -> showSettings());
 
         GifImageView button_synchronize = findViewById(R.id.button_synchronize);
         button_synchronize_drawable = (GifDrawable) button_synchronize.getDrawable();
@@ -76,10 +85,6 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
                 synchronize(this);
             }
         });
-        registerForContextMenu(button_synchronize);
-
-        ImageView imageViewLogo = findViewById(R.id.imageViewLogo);
-        registerForContextMenu(imageViewLogo);
 
         synchronize(this);
 
@@ -121,11 +126,9 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
                 .build();
 
         GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
-        client.signOut().addOnCompleteListener(s -> {
-            Toast.makeText(this, getString(R.string.disconnected_drive), Toast.LENGTH_LONG).show();
-        }).addOnFailureListener(s -> {
-            Toast.makeText(this, getString(R.string.error_disconnecting_drive), Toast.LENGTH_LONG).show();
-        });
+        client.signOut()
+                .addOnCompleteListener(s -> Toast.makeText(this, getString(R.string.disconnected_drive), Toast.LENGTH_LONG).show())
+                .addOnFailureListener(s -> Toast.makeText(this, getString(R.string.error_disconnecting_drive), Toast.LENGTH_LONG).show());
     }
 
     @Override
@@ -140,8 +143,6 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
                             GUIUtils.messageDialog(this, getString(R.string.error_while_synchronizing, Objects.requireNonNull(e.getMessage()).replaceAll("[^0-9]", "")));
                     });
         }
-
-
     }
 
     public static AES getAES() {
@@ -158,30 +159,65 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         ManageFragment.refreshPasswords();
     }
 
-    // Disconnect drive
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId() == R.id.button_synchronize) {
-            if (GoogleSignIn.getLastSignedInAccount(this) != null)
-                menu.add(1, 0, 0, R.string.disconnect_drive);
-        } else if (v.getId() == R.id.imageViewLogo) {
-            menu.add(2, 0,0, R.string.about);
-        }
-    }
+    private void showSettings() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-    @Override
-    public boolean onContextItemSelected(MenuItem menuItem) {
-        if (menuItem.getGroupId() == 1) {
-            if (menuItem.getItemId() == 0) {
-                signOut();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_settings, null);
+
+        Button btnChangeMasterPass = dialogView.findViewById(R.id.btn_change_master_pass);
+        btnChangeMasterPass.setOnClickListener(v1 -> GUIUtils.inputDialog(this, getString(R.string.enter_main_password), in -> {
+            if (in.toString().equals(password)) {
+                Intent intent = new Intent(this, MainPassActivity.class);
+                intent.putExtra("showOnboarding",false);
+                intent.putExtra("passwords", new Gson().toJson(passwordList));
+                intent.putExtra("drivePass", getAES().decrypt(PassProperty.DRIVE_PASSWORD.getValue()));
+                startActivity(intent);
             }
-        } else if(menuItem.getGroupId() == 2) {
+        }, true));
+
+        Button btnHelp = dialogView.findViewById(R.id.btn_help);
+        btnHelp.setOnClickListener(v1 -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://finnik.de/passvault"));
             startActivity(browserIntent);
-        } else {
-            return false;
+        });
+
+        Button btnOnboarding = dialogView.findViewById(R.id.btn_onboarding);
+        btnOnboarding.setOnClickListener(v1 -> {
+            Intent intent = new Intent(this, OnboardingActivity.class);
+            startActivity(intent);
+        });
+
+        Button btnShowDrive = dialogView.findViewById(R.id.btn_show_drive_pass);
+        btnShowDrive.setOnClickListener(v1 -> GUIUtils.inputDialog(this, getString(R.string.enter_main_password), in -> {
+            if (in.toString().equals(password)) {
+                String drivePass = PassActivity.getAES().decrypt(PassProperty.DRIVE_PASSWORD.getValue());
+                GUIUtils.messageDialog(this, getString(R.string.drive_password, drivePass));
+            }
+        }, true));
+        if (!PassProperty.DRIVE_PASSWORD.getValue().isEmpty()) {
+            btnShowDrive.setVisibility(View.VISIBLE);
         }
-        return true;
+
+        Button btnDisconnectDrive = dialogView.findViewById(R.id.btn_disconnect_drive);
+        btnDisconnectDrive.setOnClickListener(v1 -> signOut());
+
+        if (GoogleSignIn.getLastSignedInAccount(this) != null) {
+            btnDisconnectDrive.setVisibility(View.VISIBLE);
+        }
+
+        Button btnContact = dialogView.findViewById(R.id.btn_contact);
+        btnContact.setOnClickListener(v1 -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@finnik.de"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "I need help");
+
+            intent.setType("message/rfc822");
+
+            startActivity(intent);
+        });
+
+        builder.setView(dialogView);
+        builder.show();
     }
 }

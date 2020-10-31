@@ -46,7 +46,7 @@
     <string name="question_mark" translatable="false">\?</string>
     <string name="accept" translatable="false">OK</string>
     <string name="decline">Cancel</string>
-    <string name="about">About us and help</string>
+    <string name="about">About us and more help</string>
     <string name="disconnect_drive">Disconnect drive</string>
     <string name="onboarding_next">NEXT</string>
     <string name="onboarding_skip">SKIP</string>
@@ -60,4 +60,10 @@
     <string name="onboarding_manage_description">On this page you can manage your saved passwords! Here you can search for passwords by entering keywords into the search box e. g. the page stored together with the password. If you have found the correct password, you can copy it directly to your clipboard by clicking on it, so that you can then use it directly. More options will open when you hold down the password box. In the dialog that opens, you can display the password, edit it, or even delete it.</string>
     <string name="onboarding_drive">Synchronize with Google Drive</string>
     <string name="onboarding_drive_description">If you want to synchronize your passwords across multiple devices, you can do so via Google Drive. To set up synchronization, press the Drive logo later and log in with your Google account. If you\'ve already connected your Google Account to PassVault, you\'ll now need to enter the password used to encrypt passwords on Google Drive. The first time you associate PassVault with Google Drive, a password is generated to encrypt the passwords on Google Drive.</string>
+    <string name="settings">SETTINGS</string>
+    <string name="change_master_password">Change master password</string>
+    <string name="show_onboarding">Show help screen</string>
+    <string name="show_drive_password">Your Google Drive password</string>
+    <string name="contact_us">Contact us</string>
+    <string name="drive_password">Your Google Drive password is: %s</string>
 </resources>
