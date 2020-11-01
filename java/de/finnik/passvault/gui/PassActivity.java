@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +43,7 @@ import de.finnik.passvault.pass.PassProperty;
 import de.finnik.passvault.pass.Password;
 import de.finnik.passvault.utils.FileUtils;
 import de.finnik.passvault.utils.GUIUtils;
+import de.finnik.passvault.utils.Var;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -57,8 +57,14 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         password = getIntent().getStringExtra("pass");
-        passwordList = new ArrayList<>();
-        passwordList.addAll(Arrays.asList(new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class)));
+        try {
+            passwordList = Password.readPasswords(openFileInput(Var.PASS_FILE), password);
+        } catch (Exception e) {
+            passwordList = new ArrayList<>();
+            if(getIntent().getExtras().containsKey("passwords")) {
+                passwordList = Arrays.asList(new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class));
+            }
+        }
         if(getIntent().getExtras().containsKey("drivePass")) {
             PassProperty.DRIVE_PASSWORD.setValue(this, getAES().encrypt(getIntent().getStringExtra("drivePass")));
         }
@@ -100,7 +106,6 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private void pauseAndSkipToLogin() {
-        Log.i(TAG, "pauseAndSkipToLogin: " + pause);
         if (!pause)
             return;
         Intent intent = new Intent(PassActivity.this, MainActivity.class);
@@ -126,6 +131,7 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
                 .build();
 
         GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
+        PassProperty.DRIVE_PASSWORD.setValue(this, "");
         client.signOut()
                 .addOnCompleteListener(s -> Toast.makeText(this, getString(R.string.disconnected_drive), Toast.LENGTH_LONG).show())
                 .addOnFailureListener(s -> Toast.makeText(this, getString(R.string.error_disconnecting_drive), Toast.LENGTH_LONG).show());
@@ -152,7 +158,6 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
     public static void synchronize(Activity activity) {
         GoogleSignInAccount lastAccount = GoogleSignIn.getLastSignedInAccount(activity);
         if (lastAccount != null) {
-            button_synchronize_drawable.start();
             DriveLocalHelper.synchronize(activity, lastAccount);
         }
         FileUtils.savePasswords(activity);
@@ -200,7 +205,13 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         }
 
         Button btnDisconnectDrive = dialogView.findViewById(R.id.btn_disconnect_drive);
-        btnDisconnectDrive.setOnClickListener(v1 -> signOut());
+        btnDisconnectDrive.setOnClickListener(v1 -> GUIUtils.confirmDialog(this, getString(R.string.confirm_disconnecting_drive), b->{
+            if(b) {
+                signOut();
+                btnDisconnectDrive.setVisibility(View.GONE);
+                btnShowDrive.setVisibility(View.GONE);
+            }
+        }));
 
         if (GoogleSignIn.getLastSignedInAccount(this) != null) {
             btnDisconnectDrive.setVisibility(View.VISIBLE);

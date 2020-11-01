@@ -62,4 +62,5 @@
     <string name="show_onboarding">Hilfe anzeigen</string>
     <string name="contact_us">Kontaktiere uns</string>
     <string name="drive_password">Dein Google Drive Passwort ist: %s</string>
+    <string name="confirm_disconnecting_drive">Bist du sicher, dass du dich von Google Drive trennen willst?</string>
 </resources>

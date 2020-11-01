@@ -55,6 +55,7 @@ public class MainPassActivity extends AppCompatActivity {
 
         if(getIntent().getBooleanExtra("showOnboarding", true)) {
             Intent intent = new Intent(this, OnboardingActivity.class);
+            getIntent().putExtra("showOnboarding", false);
             startActivity(intent);
         }
     }
@@ -72,14 +73,15 @@ public class MainPassActivity extends AppCompatActivity {
                 intent.putExtra("pass", input_first.getText().toString());
                 Password[] passwords = new Password[0];
 
-                if (getIntent().getExtras().containsKey("passwords")) {
-                    passwords = new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class);
-                }
+                if(getIntent().getExtras() != null) {
+                    if (getIntent().getExtras().containsKey("passwords")) {
+                        passwords = new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class);
+                    }
 
-                if(getIntent().getExtras().containsKey("drivePass")) {
-                    intent.putExtra("drivePass", getIntent().getStringExtra("drivePass"));
+                    if (getIntent().getExtras().containsKey("drivePass")) {
+                        intent.putExtra("drivePass", getIntent().getStringExtra("drivePass"));
+                    }
                 }
-
                 intent.putExtra("passwords", new Gson().toJson(passwords));
                 startActivity(intent);
                 finish();

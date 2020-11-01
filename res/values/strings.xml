@@ -66,4 +66,5 @@
     <string name="show_drive_password">Your Google Drive password</string>
     <string name="contact_us">Contact us</string>
     <string name="drive_password">Your Google Drive password is: %s</string>
+    <string name="confirm_disconnecting_drive">Are you sure you want to disconnect from Google Drive?</string>
 </resources>

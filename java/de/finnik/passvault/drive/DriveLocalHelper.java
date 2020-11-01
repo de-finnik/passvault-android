@@ -2,7 +2,6 @@ package de.finnik.passvault.drive;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -29,7 +28,6 @@ public class DriveLocalHelper {
     private static DriveServiceHelper mDriveServiceHelper;
 
     public static void synchronize(Activity activity, GoogleSignInAccount googleSignInAccount) {
-        Log.i(TAG, "synchronize: ");
         if (mDriveServiceHelper == null) {
             GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(activity, Collections.singleton(DriveScopes.DRIVE_APPDATA));
             credential.setSelectedAccount(googleSignInAccount.getAccount());
@@ -41,6 +39,7 @@ public class DriveLocalHelper {
             mDriveServiceHelper = new DriveServiceHelper(drive);
         }
 
+        startAnimation();
         mDriveServiceHelper.fileExists().addOnSuccessListener(fileExists -> {
             if (fileExists) {
                 readPassFile(activity, googleSignInAccount);
@@ -61,19 +60,20 @@ public class DriveLocalHelper {
             GUIUtils.inputDialog(activity, activity.getString(R.string.enter_drive_pass), drivePass -> mDriveServiceHelper.readPasswords(drivePass.toString())
                     .addOnSuccessListener(drivePasswords -> compareAndStore(activity, drivePass.toString(), drivePasswords))
                     .addOnFailureListener(e -> {
-                if (e.getClass() == AES.WrongPasswordException.class) {
-                    GUIUtils.confirmDialog(activity, activity.getString(R.string.wrong_drive_pass), b -> {
-                        if (b) {
-                            String confirm = activity.getString(R.string.confirm_deleting_drive);
-                            GUIUtils.inputDialog(activity, confirm, s -> {
-                                if (s.equals(confirm.split("'")[1])) {
-                                    mDriveServiceHelper.deleteFile().addOnSuccessListener(nul -> synchronize(activity, googleSignInAccount));
+                        stopAnimation();
+                        if (e.getClass() == AES.WrongPasswordException.class) {
+                            GUIUtils.confirmDialog(activity, activity.getString(R.string.wrong_drive_pass), b -> {
+                                if (b) {
+                                    String confirm = activity.getString(R.string.confirm_deleting_drive);
+                                    GUIUtils.inputDialog(activity, confirm, s -> {
+                                        if (s.toString().equals(confirm.split("'")[1])) {
+                                            mDriveServiceHelper.deleteFile().addOnSuccessListener(nul -> synchronize(activity, googleSignInAccount));
+                                        }
+                                    }, false);
                                 }
-                            }, false);
+                            });
                         }
-                    });
-                }
-            }), true);
+                    }), true);
         } else {
             String drivePass = PassActivity.getAES().decrypt(PassProperty.DRIVE_PASSWORD.getValue());
             mDriveServiceHelper.readPasswords(drivePass).addOnSuccessListener(drivePasswords -> compareAndStore(activity, drivePass, drivePasswords)).addOnFailureListener(e -> {
@@ -86,18 +86,27 @@ public class DriveLocalHelper {
     }
 
     private static void compareAndStore(Context context, String drivePass, Password[] drivePasswords) {
+        startAnimation();
         PassActivity.passwordList = CompareVaults.compare(Arrays.asList(drivePasswords), PassActivity.passwordList);
         FileUtils.savePasswords(context);
         saveOnDrive(context, drivePass);
+        stopAnimation();
     }
 
     private static void saveOnDrive(Context context, String drivePass) {
         ManageFragment.refreshPasswords();
+        mDriveServiceHelper.savePasswords(context, PassActivity.passwordList, drivePass).addOnSuccessListener(fileId -> PassProperty.DRIVE_PASSWORD.setValue(context, PassActivity.getAES().encrypt(drivePass))).addOnFailureListener(Throwable::printStackTrace);
+    }
+
+    private static void startAnimation() {
+        PassActivity.button_synchronize_drawable.start();
+    }
+
+    private static void stopAnimation() {
         PassActivity.button_synchronize_drawable.addAnimationListener(loopNumber -> {
-            if(loopNumber == 0) {
+            if (loopNumber == 0) {
                 PassActivity.button_synchronize_drawable.stop();
             }
         });
-        mDriveServiceHelper.savePasswords(context, PassActivity.passwordList, drivePass).addOnSuccessListener(fileId -> PassProperty.DRIVE_PASSWORD.setValue(context, PassActivity.getAES().encrypt(drivePass))).addOnFailureListener(Throwable::printStackTrace);
     }
 }

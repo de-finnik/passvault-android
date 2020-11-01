@@ -1,64 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/button_border"
-    android:padding="10dp">
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
-        android:id="@+id/btn_change_master_pass"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/change_master_password"
         android:background="@drawable/button_border"
-        android:layout_marginBottom="10dp"/>
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <Button
-        android:id="@+id/btn_onboarding"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_onboarding"
-        android:background="@drawable/button_border"
-        android:layout_marginBottom="10dp"/>
+        <Button
+            android:id="@+id/btn_change_master_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_border"
+            android:text="@string/change_master_password" />
 
-    <Button
-        android:id="@+id/btn_help"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/about"
-        android:background="@drawable/button_border"
-        android:layout_marginBottom="10dp"/>
+        <Button
+            android:id="@+id/btn_onboarding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_border"
+            android:text="@string/show_onboarding" />
 
-    <Button
-        android:id="@+id/btn_show_drive_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_drive_password"
-        android:background="@drawable/button_border"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
+        <Button
+            android:id="@+id/btn_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_border"
+            android:text="@string/about" />
 
-    <Button
-        android:id="@+id/btn_disconnect_drive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/disconnect_drive"
-        android:background="@drawable/button_border"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
+        <Button
+            android:id="@+id/btn_show_drive_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_border"
+            android:text="@string/show_drive_password"
+            android:visibility="gone" />
 
-    <Button
-        android:id="@+id/btn_contact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/contact_us"
-        android:background="@drawable/button_border"
-        android:layout_marginBottom="10dp"/>
+        <Button
+            android:id="@+id/btn_disconnect_drive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_border"
+            android:text="@string/disconnect_drive"
+            android:visibility="gone" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:contentDescription="@string/author"
-        android:src="@drawable/finnik_logo" />
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_border"
+            android:text="@string/contact_us" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:contentDescription="@string/author"
+            android:src="@drawable/finnik_logo" />
+    </LinearLayout>
+</ScrollView>

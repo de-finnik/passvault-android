@@ -8,12 +8,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.finnik.passvault.AES.AES;
 import de.finnik.passvault.R;
@@ -46,21 +42,21 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(view -> {
             try {
                 String pass = et.getText().toString();
-                startPassActivity(pass, Password.readPasswords(openFileInput(Var.PASS_FILE), pass));
+                Password.readPasswords(openFileInput(Var.PASS_FILE), pass);
+                startPassActivity(pass);
             } catch (AES.WrongPasswordException e) {
                 GUIUtils.messageDialog(this, R.string.wrong_pass);
                 et.setText("");
             } catch (IOException e) {
                 e.printStackTrace();
-                startPassActivity("", new ArrayList<>());
+                startPassActivity("");
             }
         });
     }
 
-    private void startPassActivity(String pass, List<Password> passwords) {
+    private void startPassActivity(String pass) {
         Intent intent = new Intent(MainActivity.this, PassActivity.class);
         intent.putExtra("pass", pass);
-        intent.putExtra("passwords", new Gson().toJson(passwords.toArray(new Password[0])));
         startActivity(intent);
         finish();
     }
