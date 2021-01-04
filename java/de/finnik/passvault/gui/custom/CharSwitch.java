@@ -1,4 +1,4 @@
-package de.finnik.passvault.gui;
+package de.finnik.passvault.gui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -21,11 +21,12 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import de.finnik.passvault.R;
-import de.finnik.passvault.gui.CharSwitch;
+import de.finnik.passvault.gui.custom.CharSwitch;
 import de.finnik.passvault.gui.PassActivity;
 import de.finnik.passvault.pass.PassProperty;
 import de.finnik.passvault.pass.Password;
 import de.finnik.passvault.pass.PasswordGenerator;
+import de.finnik.passvault.utils.GUIUtils;
 
 public class GenerateFragment extends Fragment {
     @Override
@@ -37,13 +38,19 @@ public class GenerateFragment extends Fragment {
             View layout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_generate_options, null);
             LinearLayout linearLayout = layout.findViewById(R.id.linear_generate_options);
             AlertDialog generate_options = new AlertDialog.Builder(getContext()).setView(layout).setOnCancelListener(dialog -> {
+                int countSelectedChars = 0;
                 for (int i = 0; i < linearLayout.getChildCount(); i++) {
                     View childAt = linearLayout.getChildAt(i);
                     if (childAt.getClass() == CharSwitch.class) {
                         CharSwitch charSwitch = (CharSwitch) childAt;
                         assert charSwitch.getPassChars().getMatchingProp() != null;
                         charSwitch.getPassChars().getMatchingProp().setValue(getContext(), charSwitch.isChecked());
+                        if (charSwitch.isChecked())
+                            countSelectedChars++;
                     }
+                }
+                if (countSelectedChars == 0) {
+                    GUIUtils.messageDialog(getActivity(), R.string.insufficientChars);
                 }
             }).create();
             generate_options.setContentView(layout);
@@ -57,9 +64,11 @@ public class GenerateFragment extends Fragment {
                     PassProperty.GEN_LENGTH.setValue(getContext(), newLength);
                     ((TextView) layout.findViewById(R.id.textView_password_length)).setText(getString(R.string.password_length, newLength));
                 }
+
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
                 }
+
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                 }
@@ -81,8 +90,12 @@ public class GenerateFragment extends Fragment {
                     .filter(prop -> Boolean.parseBoolean(prop.getValue()))
                     .map(PasswordGenerator.PassChars::getMatchingChar)
                     .toArray(PasswordGenerator.PassChars[]::new);
-            String password = PasswordGenerator.generatePassword(Integer.parseInt(PassProperty.GEN_LENGTH.getValue()), passChars);
-            ((EditText) root.findViewById(R.id.edit_text_pass)).setText(password);
+            if (passChars.length == 0) {
+                GUIUtils.messageDialog(getActivity(), R.string.insufficientChars);
+            } else {
+                String password = PasswordGenerator.generatePassword(Integer.parseInt(PassProperty.GEN_LENGTH.getValue()), passChars);
+                ((EditText) root.findViewById(R.id.edit_text_pass)).setText(password);
+            }
         });
 
         Button btnSave = root.findViewById(R.id.button_save);

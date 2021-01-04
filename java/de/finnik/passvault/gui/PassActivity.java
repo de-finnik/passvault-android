@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -51,23 +52,25 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
     public static String password;
     public static List<Password> passwordList;
 
-    private static final String TAG = "PassActivity";
     public static GifDrawable button_synchronize_drawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Handle intent extras
+        assert getIntent().getExtras() != null : "Intent has no extras";
         password = getIntent().getStringExtra("pass");
         try {
             passwordList = Password.readPasswords(openFileInput(Var.PASS_FILE), password);
         } catch (Exception e) {
             passwordList = new ArrayList<>();
-            if(getIntent().getExtras().containsKey("passwords")) {
+            if (getIntent().getExtras().containsKey("passwords")) {
                 passwordList = Arrays.asList(new Gson().fromJson(getIntent().getStringExtra("passwords"), Password[].class));
             }
         }
-        if(getIntent().getExtras().containsKey("drivePass")) {
+        if (getIntent().getExtras().containsKey("drivePass")) {
             PassProperty.DRIVE_PASSWORD.setValue(this, getAES().encrypt(getIntent().getStringExtra("drivePass")));
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pass);
 
@@ -86,13 +89,16 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         button_synchronize_drawable.setSpeed(4.0f);
         button_synchronize.setOnClickListener(v -> {
             if (GoogleSignIn.getLastSignedInAccount(this) == null) {
-                signIn(v);
+                signIn();
             } else {
                 synchronize(this);
             }
         });
 
         synchronize(this);
+
+        // Don't permit screenshots
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }
@@ -105,7 +111,7 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    private void pauseAndSkipToLogin() {
+    private void resumeAndGoToLogin() {
         if (!pause)
             return;
         Intent intent = new Intent(PassActivity.this, MainActivity.class);
@@ -113,7 +119,12 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         startActivity(intent);
     }
 
-    public void signIn(View v) {
+    /**
+     * Signs in the user to their Google account
+     *
+     * @see PassActivity#startActivityForResult(Intent, int)
+     */
+    public void signIn() {
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
                 .requestEmail()
@@ -124,6 +135,9 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         startActivityForResult(client.getSignInIntent(), 400);
     }
 
+    /**
+     * Signs out the user from their Google account
+     */
     public void signOut() {
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
@@ -145,16 +159,27 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
             GoogleSignIn.getSignedInAccountFromIntent(data)
                     .addOnSuccessListener(googleSignInAccount -> DriveLocalHelper.synchronize(this, googleSignInAccount))
                     .addOnFailureListener(e -> {
+                        assert e.getMessage() != null;
                         if (!e.getMessage().startsWith("12501"))
                             GUIUtils.messageDialog(this, getString(R.string.error_while_synchronizing, Objects.requireNonNull(e.getMessage()).replaceAll("[^0-9]", "")));
                     });
         }
     }
 
+    /**
+     * Creates an {@link AES} object with the users {@link this#password}
+     *
+     * @return {@link AES} object containing {@link this#password}
+     */
     public static AES getAES() {
         return new AES(password);
     }
 
+    /**
+     *
+     *
+     * @param activity the context to be passed
+     */
     public static void synchronize(Activity activity) {
         GoogleSignInAccount lastAccount = GoogleSignIn.getLastSignedInAccount(activity);
         if (lastAccount != null) {
@@ -164,6 +189,9 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         ManageFragment.refreshPasswords();
     }
 
+    /**
+     *
+     */
     private void showSettings() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -174,9 +202,10 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         btnChangeMasterPass.setOnClickListener(v1 -> GUIUtils.inputDialog(this, getString(R.string.enter_main_password), in -> {
             if (in.toString().equals(password)) {
                 Intent intent = new Intent(this, MainPassActivity.class);
-                intent.putExtra("showOnboarding",false);
+                intent.putExtra("showOnboarding", false);
                 intent.putExtra("passwords", new Gson().toJson(passwordList));
-                intent.putExtra("drivePass", getAES().decrypt(PassProperty.DRIVE_PASSWORD.getValue()));
+                if (!PassProperty.DRIVE_PASSWORD.getValue().isEmpty())
+                    intent.putExtra("drivePass", getAES().decrypt(PassProperty.DRIVE_PASSWORD.getValue()));
                 startActivity(intent);
             }
         }, true));
@@ -205,8 +234,8 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
         }
 
         Button btnDisconnectDrive = dialogView.findViewById(R.id.btn_disconnect_drive);
-        btnDisconnectDrive.setOnClickListener(v1 -> GUIUtils.confirmDialog(this, getString(R.string.confirm_disconnecting_drive), b->{
-            if(b) {
+        btnDisconnectDrive.setOnClickListener(v1 -> GUIUtils.confirmDialog(this, getString(R.string.confirm_disconnecting_drive), b -> {
+            if (b) {
                 signOut();
                 btnDisconnectDrive.setVisibility(View.GONE);
                 btnShowDrive.setVisibility(View.GONE);
@@ -219,12 +248,8 @@ public class PassActivity extends AppCompatActivity implements LifecycleObserver
 
         Button btnContact = dialogView.findViewById(R.id.btn_contact);
         btnContact.setOnClickListener(v1 -> {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@finnik.de"});
-            intent.putExtra(Intent.EXTRA_SUBJECT, "I need help");
-
-            intent.setType("message/rfc822");
-
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", "contact@finnik.de", null));
             startActivity(intent);
         });
 

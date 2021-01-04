@@ -22,7 +22,7 @@
         android:progressTint="@color/foreground"
         android:thumbTint="@color/foreground" />
 
-    <de.finnik.passvault.gui.CharSwitch
+    <de.finnik.passvault.gui.custom.CharSwitch
         android:id="@+id/switch_big_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:theme="@style/test"
         app:passChar="BIG_LETTERS"/>
 
-    <de.finnik.passvault.gui.CharSwitch
+    <de.finnik.passvault.gui.custom.CharSwitch
         android:id="@+id/switch_small_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:theme="@style/test"
         app:passChar="SMALL_LETTERS" />
 
-    <de.finnik.passvault.gui.CharSwitch
+    <de.finnik.passvault.gui.custom.CharSwitch
         android:id="@+id/switch_numbers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:theme="@style/test"
         app:passChar="NUMBERS"/>
 
-    <de.finnik.passvault.gui.CharSwitch
+    <de.finnik.passvault.gui.custom.CharSwitch
         android:id="@+id/switch_specials"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

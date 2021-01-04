@@ -19,7 +19,6 @@ import de.finnik.passvault.utils.GUIUtils;
 import de.finnik.passvault.utils.Var;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         PassProperty.load(this);
@@ -49,11 +48,16 @@ public class MainActivity extends AppCompatActivity {
                 et.setText("");
             } catch (IOException e) {
                 e.printStackTrace();
-                startPassActivity("");
             }
         });
     }
 
+    /**
+     * Starts the {@link PassActivity} and finishes this activity
+     * The created intent gets a string extra 'pass' from the given arguemnt
+     *
+     * @param pass The string to be put as string extra 'pass' to the new intent
+     */
     private void startPassActivity(String pass) {
         Intent intent = new Intent(MainActivity.this, PassActivity.class);
         intent.putExtra("pass", pass);
@@ -61,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Starts the {@link MainPassActivity} and finishes this activity
+     */
     private void startMainPassActivity() {
         Intent intent = new Intent(MainActivity.this, MainPassActivity.class);
         startActivity(intent);

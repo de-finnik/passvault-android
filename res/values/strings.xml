@@ -67,4 +67,5 @@
     <string name="contact_us">Contact us</string>
     <string name="drive_password">Your Google Drive password is: %s</string>
     <string name="confirm_disconnecting_drive">Are you sure you want to disconnect from Google Drive?</string>
+    <string name="insufficientChars">You have to select at least one type of character.</string>
 </resources>
